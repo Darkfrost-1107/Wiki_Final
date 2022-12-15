@@ -35,7 +35,7 @@ $sth->execute or die "error";
 
 while(my @row=$sth->fetchrow_array){
     if($row[0] eq $titulo){
-        $contenido=$row[1];
+        $contenido=" ".$row[1];
     }
 }
  
@@ -44,50 +44,51 @@ $dbh->disconnect;
 
 #regular expresions
 #             titulos  
-$contenido =~ s/([^#]#[^#][^(#\*\~\`)]+)|(^#[^#][^(#\*\~\`)]+)/<h1>$&<\/h1> /g;
-$contenido =~ s/([^#]##[^#][^(#\*\~\`)]+)|(^##[^#][^(#\*\~\`)]+)/<h2>$&<\/h2> /g;
-$contenido =~ s/([^#]###[^#][^(#\*\~\`)]+)|(^###[^#][^(#\*\~\`)]+)/<h3>$&<\/h3> /g;
-$contenido =~ s/([^#]####[^#][^(#\*\~\`)]+)|(^####[^#][^(#\*\~\`)]+)/<h4>$&<\/h4> /g;
-$contenido =~ s/([^#]#####[^#][^(#\*\~\`)]+)|(^#####[^#][^(#\*\~\`)]+)/<h5>$&<\/h5> /g;
-$contenido =~ s/([^#]######[^#][^(#\*\~\`)]+)|(^######[^#][^(#\*\~\`)]+)/<h6>$&<\/h6> /g;
-#             otros simbolos
-$expresionRegular=expresionRegularEntreSimbolos("*",2);
-$contenido =~ s/$expresionRegular/<p><strong>$&<\/strong><\/p> /g;
-$expresionRegular=expresionRegularEntreSimbolos("*",1);
-$contenido =~ s/$expresionRegular/<p><em>$&<\/em><\/p> /g;
-$expresionRegular=expresionRegularEntreSimbolos("~",2);
-$contenido =~ s/$expresionRegular/<p>$&<\/p> /g;
-$expresionRegular=expresionRegularEntreSimbolos("_",1);
-$contenido =~ s/$expresionRegular/<em>$&<\/em> /g;
-$expresionRegular=expresionRegularEntreSimbolos("*",3);
-$contenido =~ s/$expresionRegular/<p><strong><em>$&<\/em><\/strong><\/p> /g;
-$expresionRegular=expresionRegularEntreSimbolos("`",3);
-$contenido =~ s/$expresionRegular/<p><code>$&<\/code><\/p> /g;
-#links
-$contenido =~ s//<p><code>$&<\/code><\/p> /g;
-print "$contenido";
+
+$contenido =~ s/([^#]#{1}([^(#\*\~\`)]+))/<h1>$2<\/h1> /g;
+
+$contenido =~ s/([^#]#{2}([^(#\*\~\`)]+))/<h2>$2<\/h2> /g;
+
+$contenido =~ s/([^#]#{3}([^(#\*\~\`)]+))/<h3>$2<\/h3>/g;
+
+$contenido =~ s/([^#]#{4}([^(#\*\~\`)]+))/<h4>$2<\/h4> /g;
+
+$contenido =~ s/([^#]#{5}([^(#\*\~\`)]+))/<h5>$2<\/h5>/g;
+
+$contenido =~ s/([^#]#{6}([^(#\*\~\`)]+))/<h6>$2<\/h6> /g;
 
 
-sub expresionRegularEntreSimbolos{
+# # #             otros simbolos
+$expresionRegular=expresionRegularGenerada("*",2,$contenido);
+$contenido =~ s/$expresionRegular/<p><strong>$2<\/strong><\/p> /g;
+
+$expresionRegular=expresionRegularGenerada("*",1,$contenido);
+$contenido =~ s/$expresionRegular/<p><em>$2<\/em><\/p> /g;
+
+$expresionRegular=expresionRegularGenerada("~",2,$contenido);
+$contenido =~ s/$expresionRegular/<p>$2<\/p> /g;
+
+$expresionRegular=expresionRegularGenerada("_",1,$contenido);
+$contenido =~ s/$expresionRegular/<em>$2<\/em> /g;
+
+$expresionRegular=expresionRegularGenerada("*",3,$contenido);
+$contenido =~ s/$expresionRegular/<p><strong><em>$2<\/em><\/strong><\/p> /g;
+
+$expresionRegular=expresionRegularGenerada("`",3,$contenido);
+$contenido =~ s/$expresionRegular/<p><code>$2<\/code><\/p> /g;
+
+##                links
+
+$contenido =~ s/\[{1}([^\]]+)\]{1}\({1}(.+)\){1}/<a href="$2">$1<\/a> /g; 
+
+print $contenido;
+
+sub expresionRegularGenerada{
     my $simboloCostados=$_[0];
-    my $repeticiones=$_[1];
+    my $cantidadSimbolos=$_[1];
+    my $cadena=$_[2];
 
-    my $simboloDeNoEsteSimbolo="[^\\$simboloCostados]";
+    $cadena="(\\$simboloCostados\{$cantidadSimbolos}([^\\$simboloCostados]+)\\$simboloCostados\{$cantidadSimbolos})";
+    return $cadena;
 
-    my $simboloCantidadDeVeces="";
-    my $expresionTotal;
-
-
-    for(my $i=0;$i<$repeticiones;$i++){
-        $simboloCantidadDeVeces.="\\$simboloCostados";
-    }
-    #medio
-    $expresionTotal="($simboloDeNoEsteSimbolo$simboloCantidadDeVeces($simboloDeNoEsteSimbolo+)$simboloCantidadDeVeces$simboloDeNoEsteSimbolo)";
-    #principio
-    $expresionTotal.="|(^$simboloCantidadDeVeces($simboloDeNoEsteSimbolo+)$simboloCantidadDeVeces$simboloDeNoEsteSimbolo)";
-    #final
-    $expresionTotal.="|($simboloDeNoEsteSimbolo$simboloCantidadDeVeces($simboloDeNoEsteSimbolo+)$simboloCantidadDeVeces\$)";
-    #principio y final
-    $expresionTotal.="|(^$simboloCantidadDeVeces($simboloDeNoEsteSimbolo+)$simboloCantidadDeVeces\$)";
-    return $expresionTotal;
 }
