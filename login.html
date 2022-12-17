@@ -4,21 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilo.css">
-    <title>Iniciar Secion</title>
+    <link rel="stylesheet" href="estiloUniversal.css">
+    <title>INICIAR SECION</title>
 </head>
 <body>
+    <nav>
+        <ul>
+			<li><a href="#">Inicio</a></li>
+            <li><a href="register.html">Registrarse</a></li>
+            <li><a href="login.html">Logearse</a></li>
+            <li><a href="#">Nuevo Articulo</a></li>
+            <li><a href="imagenes.html">Ver Articulo</a></li>
+            <li><a href="avanzada.html">Ver Pagina</a></li>
+            <li><a href="#">Editar Articulo</a></li>
+            <li><a href="imagenes.html">Lista</a></li>
+            <li><a href="imagenes.html">Eliminar</a></li>
+        </ul>     
+    </nav>
     
     <form action="cgi-bin/login.pl" method="post">
-        <h1>Usuario</h1>
-        <input type="text" name="usuario">
-        <h1>Contraseña</h1>
-        <input type="password" name="contraseña">
-        <input type="submit" value="Iniciar Secion">
-
+        <section class="registro" style="text-align: center">
+            <h4>INICIAR SESION</h4>
+            <input class="control" type="text" name="usuario" placeholder="Ingrese Usuario">
+            <input class="control" type="password" name="contraseña" placeholder="Ingrese Contraseña">
+            <input class="boton" type="submit" value="Iniciar Secion">
+            <a href="inicio.html">Regresar</a>
+        </section>
         
     </form>
-
-    <a href="inicio.html">Regresar al Inicio</a>
+       
+    
 </body>
 </html>

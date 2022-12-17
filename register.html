@@ -4,28 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estiloUniversal.css">
     <title>Registrate</title>
 </head>
 <body>
-    <form action="cgi-bin/register.pl" method="post">
-        <h1>Registrate</h1>
 
-        <h2>Usuario</h2>
-        <input type="text" name="userName">
-        <h2>Contraseña</h2>
-        <input type="password" name="password">
-        <h2>Apellido</h2>
-        <input type="text" name="lastName">
-        <h2>Nombre</h2>
-        <input type="text" name="firstName">
-        
-        
-        <input type="submit" value="Registrate">
+    <nav>
+        <ul>
+			<li><a href="#">Inicio</a></li>
+            <li><a href="register.html">Registrarse</a></li>
+            <li><a href="login.html">Logearse</a></li>
+            <li><a href="#">Nuevo Articulo</a></li>
+            <li><a href="imagenes.html">Ver Articulo</a></li>
+            <li><a href="avanzada.html">Ver Pagina</a></li>
+            <li><a href="#">Editar Articulo</a></li>
+            <li><a href="imagenes.html">Lista</a></li>
+            <li><a href="imagenes.html">Eliminar</a></li>
+        </ul>     
+    </nav>
+
+    <form action="cgi-bin/register.pl" method="post">
+        <section class="registro" style="text-align: center">
+            <h4>REGISTRATE</h4>
+
+            <input class="control" type="text" name="userName" placeholder="Ingrese Usuario">
+            <input class="control" type="password" name="password" placeholder="Ingrese Contraseña">
+            <input class="control" type="text" name="firstName" placeholder="Ingrese Nombre">
+            <input class="control" type="text" name="lastName" placeholder="Ingrese Apellido">
+            
+            
+            
+            <input  class="boton" type="submit" value="Registrate">
+            <a href="inicio.html">Regresar</a>
+
+        </section>
 
     </form>
-    <a href="inicio.html">Regresar al inicio</a>
-
+    
 
 
 
@@ -34,130 +49,3 @@
 </body>
 </html>
 
-<!--
-
-    sub checkUserName{
-    my $userNameQuery=$_[0];
-    
-    my $user1 = 'alumno';
-    my $password1= 'pweb1';
-    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.9';
-    my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
-    
-    
-    my $sql = "SELECT userName FROM Users WHERE userName=?";
-    my $sth=$dbh->prepare($sql);
-    $sth->execute($userNameQuery);
-    my @row=$sth->fetchrow_array;
-    $sth->finish;
-    $dbh->disconnect;
-    return @row;
-
-}
-sub successRegister{            
-    my $owner= $_[0];
-    my $firstNameQuery1= $_[1];
-    my $lastNameQuery1 = $_[2];
-
-    my $body=<XML;
-
-    <user>
-        <owner>$owner</owner>
-        <firstName>$firsNameQuery1</firstName>
-        <lastName>$lastNameQuery1</lastName>
-    </user>
-    XML
-        print(renderBody($body));
-
-}
-sub showRegister{
-    my $body=<XML;
-    <user>
-    </user>
-    XML
-    print(renderBody($body));
-}
-
-sub renderBody{
-    my $body=$_[0];
-    my $xml=<XML;
-    <?xml version="1.0" encoding="UTF-8"?>
-    $body
-    XML
-    return $xml;
-
-}
--->
-
-
-<!--
-    if(defined($userName$firstName) and defined($password) and defined($firstName) and defined($lastName)){
-    if(!checkUserName($userName)){
-        register($userName,$password,$firstName,$lastName);
-        print "c";
-        #successRegister($userName,$firstName,$lastName);
-    }
-    else{
-        print "b";
-        #showRegister();
-    }
-}
-else{
-    print "a";
-    #showRegister();
-}
-
-
-  sub checkUserName{
-    my $userNameQuery=$_[0];
-    
-    my $user1 = 'alumno';
-    my $password1= 'pweb1';
-    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.9';
-    my $dbh = DBI ->connect($dsn,$user,$password1) or die ("No se pudo conectar");
-    
-    
-    my $sql = "SELECT userName FROM Users WHERE userName=?";
-    my $sth=$dbh->prepare($sql);
-    $sth->execute($userNameQuery);
-    my @row=$sth->fetchrow_array;
-    $sth->finish;
-    $dbh->disconnect;
-    return @row;
-
-}
-sub successRegister{            
-    my $owner= $_[0];
-    my $firstNameQuery1= $_[1];
-    my $lastNameQuery1 = $_[2];
-
-    my $body=<XML;
-
-    <user>
-        <owner>$owner</owner>
-        <firstName>$firsNameQuery1</firstName>
-        <lastName>$lastNameQuery1</lastName>
-    </user>
-    XML
-        print(renderBody($body));
-
-}
-sub showRegister{
-    my $body=<XML;
-    <user>
-    </user>
-    XML
-    print(renderBody($body));
-}
-
-sub renderBody{
-    my $body=$_[0];
-    my $xml=<XML;
-    <?xml version="1.0" encoding="UTF-8"?>
-    $body
-    XML
-    return $xml;
-}
-
-
--->
