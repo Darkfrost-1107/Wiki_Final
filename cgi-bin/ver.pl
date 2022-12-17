@@ -35,7 +35,7 @@ $sth->execute or die "error";
 
 while(my @row=$sth->fetchrow_array){
     if($row[0] eq $titulo){
-        $contenido=" ".$row[1];
+        $contenido=" $row[1] ";
     }
 }
  
@@ -88,7 +88,7 @@ sub expresionRegularGenerada{
     my $cantidadSimbolos=$_[1];
     my $cadena=$_[2];
 
-    $cadena="(\\$simboloCostados\{$cantidadSimbolos}([^\\$simboloCostados]+)\\$simboloCostados\{$cantidadSimbolos})";
+    $cadena="([^\\$simboloCostados]\\$simboloCostados\{$cantidadSimbolos}([^\\$simboloCostados]+)\\$simboloCostados\{$cantidadSimbolos}[^\\$simboloCostados])";
     return $cadena;
 
 }
