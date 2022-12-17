@@ -10,8 +10,8 @@ my $userName=$q->param("userName");
 my $password=$q->param("password");
 
 if(defined($userName) and defined($password) ){
-    if(checkLogin($user,$password)){
-        my @arr=checkLogin($user,$password);
+    if(checkLogin($userName,$password)){
+        my @arr=checkLogin($userName,$password);
         successLogin($arr[0],$arr[3],$arr[2]);
     }
     else{
@@ -28,7 +28,7 @@ sub checkLogin{
 
     my $user = 'alumno';
     my $password= 'pweb1';
-    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.9';
+    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.13';
     my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
 
     my $sql="SELECT * FROM Users WHERE userName=? AND password=?";

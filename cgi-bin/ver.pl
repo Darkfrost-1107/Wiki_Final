@@ -25,7 +25,7 @@ print "<h1> $titulo </h1>";
 
 my $user = 'alumno';
 my $password = 'pweb1';
-my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.14";
+my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.13";
   
 my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
 
