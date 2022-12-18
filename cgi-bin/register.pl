@@ -32,7 +32,7 @@ else{
     
     my $user1 = 'alumno';
     my $password1= 'pweb1';
-    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.9';
+    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.13';
     my $dbh = DBI ->connect($dsn,$user1,$password1) or die ("No se pudo conectar");
     
     

@@ -25,7 +25,7 @@ print "<h1> $titulo </h1>";
 
 my $user = 'alumno';
 my $password = 'pweb1';
-my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.14";
+my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.13";
   
 my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
 
@@ -35,7 +35,7 @@ $sth->execute or die "error";
 
 while(my @row=$sth->fetchrow_array){
     if($row[0] eq $titulo){
-        $contenido=" ".$row[1];
+        $contenido=" $row[1] ";
     }
 }
  
@@ -88,7 +88,7 @@ sub expresionRegularGenerada{
     my $cantidadSimbolos=$_[1];
     my $cadena=$_[2];
 
-    $cadena="(\\$simboloCostados\{$cantidadSimbolos}([^\\$simboloCostados]+)\\$simboloCostados\{$cantidadSimbolos})";
+    $cadena="([^\\$simboloCostados]\\$simboloCostados\{$cantidadSimbolos}([^\\$simboloCostados]+)\\$simboloCostados\{$cantidadSimbolos}[^\\$simboloCostados])";
     return $cadena;
 
 }
