@@ -10,8 +10,8 @@ my $userName=$q->param("userName");
 my $password=$q->param("password");
 
 if(defined($userName) and defined($password) ){
-    if(checkLogin($user,$password)){
-        my @arr=checkLogin($user,$password);
+    if(checkLogin($userName,$password)){
+        my @arr=checkLogin($userName,$password);
         successLogin($arr[0],$arr[3],$arr[2]);
     }
     else{
