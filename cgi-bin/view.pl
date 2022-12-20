@@ -1,10 +1,10 @@
 #!"c:/Strawberry/perl/bin/perl.exe"
 use strict;
 use warnings;
-use DBI;
 use CGI;
+use DBI;
 
- print "Content-type: text/html\n\n";
+print "Content-type: text/html\n\n";
 print <<HTML;
 <!DOCTYPE html>
 <html>
@@ -14,37 +14,22 @@ print <<HTML;
     <title>Actor id 5 </title>
 </head>
 <body>
-    <a href="listado.pl">retroceder</a>
+    
 HTML
 
-my $q = CGI->new;
-my $titulo=$q->param("titulo");
-my $contenido;
+my $q=CGI->new;
+print $q -> header('html');
+my $owner=$q->param("owner");
+my $title=$q->param("title");
 my $expresionRegular;
-print "<h1> $titulo </h1>";
 
-my $user = 'alumno';
-my $password = 'pweb1';
-my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.13";
-  
-my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
+my $contenido=renderText($owner,$title);
 
-my $sth = $dbh->prepare("SELECT Titulo,Pagina FROM wiki" );
 
-$sth->execute or die "error"; 
 
-while(my @row=$sth->fetchrow_array){
-    if($row[0] eq $titulo){
-        $contenido=" $row[1] ";
-    }
-}
- 
-$sth ->finish;
-$dbh->disconnect;   
 
-#regular expresions
-#             titulos  
-
+#sub transformar{
+ #   my $contenido= " ".$_[0]." ";
 $contenido =~ s/([^#]#{1}([^(#\*\~\`)]+))/<h1>$2<\/h1> /g;
 
 $contenido =~ s/([^#]#{2}([^(#\*\~\`)]+))/<h2>$2<\/h2> /g;
@@ -92,3 +77,25 @@ sub expresionRegularGenerada{
     return $cadena;
 
 }
+sub renderText{
+    my $ownerQuery=$_[0];
+    my $titleQuery=$_[1];
+    
+   
+    
+    my $user = 'alumno';
+    my $password= 'pweb1';
+    my $dsn ='DBI:MariaDB:database=pweb1;host=192.168.1.9';
+    my $dbh = DBI->connect($dsn,$user,$password) or die ("No se pudo conectar");
+    
+    
+    my $sth=$dbh->prepare("SELECT text FROM Articles WHERE owner=? AND title=?");
+    $sth->execute($ownerQuery,$titleQuery);
+    my @row=$sth->fetchrow_array;
+    $sth->finish;
+    $dbh->disconnect;
+    return $row[0];
+
+}
+
+#}
