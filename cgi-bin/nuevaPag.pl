@@ -5,52 +5,83 @@ use warnings;
 use DBI;
 use CGI;
 
- print "Content-type: text/html\n\n";
-print <<HTML;
-<!DOCTYPE html>
-<html>
-<head>
-    
-    <link rel="stylesheet" type="text/css" href="../estilosPerl124.css">
-    <title>Actor id 5 </title>
-</head>
-<body>
-          
-HTML
 my $q = CGI->new;
-my $titulo=$q->param("titulo");
-my $contenido=$q->param("contenido");
+print $q -> header('text/xml');
+my $title=$q->param("title");
+my $text=$q->param("text");
+my $owner=$q->param("owner");
 
-if(defined $titulo && defined $contenido){
+my $value=-1;
+
+if(defined $owner){
+	
     my $user = 'alumno';
     my $password = 'pweb1';
-    my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.13";
-  
+    my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.9";
+
     my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
-    my $sth = $dbh->prepare("INSERT INTO wiki (Titulo,Pagina) VALUES (?,?)" );
+    my $sth = $dbh->prepare("SELECT userName FROM Users WHERE userName=?");
+    $sth->execute($owner);
+    
+    my @row=$sth->fetchrow_array;
+    if($row[0] ne ""){
+        
+        if($title ne "" && $text ne ""){
+            my $user = 'alumno';
+            my $password = 'pweb1';
+            my $dsn = "DBI:MariaDB:database=pweb1;host=192.168.1.9";
+  
+            my $dbh = DBI ->connect($dsn,$user,$password) or die ("No se pudo conectar");
+            $sth = $dbh->prepare("INSERT INTO Articles (title,owner,text) VALUES (?,?,?)" );
+            $sth->execute($title,$owner,$text) or die "error"; 
+            $value=0;
+            
+        }
+        elsif($title eq "" || $text eq ""){
+            $value=1;
 
-    $sth->execute($titulo,$contenido) or die "error"; 
-
-    print <<HTML;
-    <h1>$titulo</h1>
-    <p>$contenido</p>
-    <br>
-    <h1>Pagina grabada <a href="listado.pl">Listado de paginas</a></h1>
-
-HTML
-
+        }
+    }
+    else{
+        $value=2;
+    }
 }
 
-if(!defined $titulo && !defined $contenido){
-    print <<HTML;
-    <form action="nuevaPag.pl">
-        <p>Titulo</p>    
-        <input type="text" name="titulo">
-        <p>texto</p>
-        <textarea name="contenido" style="height:500px;width:600px"></textarea>
-        <input type="submit">
-        <a href="listado.pl">cancelar</a>
-    </form>
-HTML
+if($value==2){
 
+    print <<XML;
+<?xml version="1.0" encoding="UTF-8"?>
+    <article>
+	usuario incorrecto
+    </article>
+
+XML
+}
+elsif($value==1){
+    print <<XML;
+<?xml version="1.0" encoding="UTF-8"?>
+    <article>
+	falta llenar campo
+    </article>
+
+XML
+}
+elsif($value==0){
+
+print <<XML;
+<?xml version="1.0" encoding="UTF-8"?>
+        <article>
+            <owner>
+		$owner
+            </owner>
+            <title>
+		$title
+            </title>
+            <text>
+		$text
+	    </text>
+        </article>
+XML
+
+    
 }
