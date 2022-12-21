@@ -23,19 +23,16 @@
         </ul>     
     </nav>
 
-    <form action="cgi-bin/register.pl" method="post">
+    <form action="../cgi-bin/register.pl" method="post">
         <section class="registro" style="text-align: center">
             <h4>REGISTRATE</h4>
 
-            <input class="control" type="text" name="userName" placeholder="Ingrese Usuario">
-            <input class="control" type="password" name="password" placeholder="Ingrese Contraseña">
-            <input class="control" type="text" name="firstName" placeholder="Ingrese Nombre">
-            <input class="control" type="text" name="lastName" placeholder="Ingrese Apellido">
-            
-            
+            <input class="control" type="text" name="userName" placeholder="Ingrese Usuario" required>
+            <input class="control" type="password" name="password" placeholder="Ingrese Contraseña" required>
+            <input class="control" type="text" name="firstName" placeholder="Ingrese Nombre" required>
+            <input class="control" type="text" name="lastName" placeholder="Ingrese Apellido" required>
             
             <input  class="boton" type="submit" value="Registrate">
-            <a href="inicio.html">Regresar</a>
 
         </section>
 
